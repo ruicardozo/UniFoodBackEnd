@@ -6,8 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-//	@Produces("text/plain;charset=UTF-8")
+import javax.ws.rs.core.Response;
 
 @Path("/api")
 public class UniFoodService
@@ -15,28 +14,39 @@ public class UniFoodService
 	@GET
 	@Path("/text")
 	@Produces("text/plain")
-	public String testaServicoText()
+	public Response testaServicoText()
 	{
-		return "UniFood back-end versão 0.0.1-SNAPSHOT";
+		return addCorsHeaders(Response.ok("UniFood back-end versão 0.0.1-SNAPSHOT")).build();
 	}
 
 	@GET
 	@Path("/html")
-	@Produces({MediaType.TEXT_HTML})
-	public String testaServicoHtml()
+	@Produces(
+	{ MediaType.TEXT_HTML })
+	public Response testaServicoHtml()
 	{
-		return "<html><meta charset=\"utf-8\"><p><b>UniFood</b> back-end versão 0.0.1-SNAPSHOT</p></html>";
+		return addCorsHeaders(Response.ok("<html><meta charset=\"utf-8\"><p><b>UniFood</b> back-end versão 0.0.1-SNAPSHOT</p></html>")).build();
 	}
 
 	@GET
 	@Path("/json")
 	@Produces("application/json")
-	public JsonObject testaServicoJson()
+	public Response testaServicoJson()
 	{
 		JsonObject value = Json.createObjectBuilder()
 				.add("sistema", "UniFood back-end")
-				.add("versao", "0.0.1-SNAPSHOT").build();
-		return value;
+				.add("versao", "0.0.1-SNAPSHOT")
+				.build();
+		return addCorsHeaders(Response.ok(value)).build();
 	}
 
+	// Helper method to add CORS headers
+	private Response.ResponseBuilder addCorsHeaders(Response.ResponseBuilder responseBuilder)
+	{
+		return responseBuilder
+				.header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+				.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+				.header("Access-Control-Allow-Credentials", "true");
+	}
 }
