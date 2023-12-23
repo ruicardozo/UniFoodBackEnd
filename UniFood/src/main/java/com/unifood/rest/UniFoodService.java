@@ -1,5 +1,8 @@
-package com.unifood.core.rest;
+package com.unifood.rest;
 
+import java.util.List;
+
+import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.GET;
@@ -8,9 +11,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.unifood.ed.TabelaED;
+import com.unifood.rn.TabelaRN;
+
 @Path("/api")
 public class UniFoodService
 {
+	@Inject
+	private TabelaRN tabelaRN;
+
 	@GET
 	@Path("/text")
 	@Produces("text/plain")
@@ -38,6 +47,15 @@ public class UniFoodService
 				.add("versao", "0.0.1-SNAPSHOT")
 				.build();
 		return addCorsHeaders(Response.ok(value)).build();
+	}
+
+	@GET
+	@Path("/listatabelas")
+	@Produces("application/json")
+	public Response listaTabelas()
+	{
+		List<TabelaED> lista = tabelaRN.lista();
+		return addCorsHeaders(Response.ok(lista)).build();
 	}
 
 	// Helper method to add CORS headers

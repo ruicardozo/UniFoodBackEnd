@@ -1,4 +1,4 @@
-package com.unifood.core.rest;
+package com.unifood.rest;
 
 import java.io.IOException;
 

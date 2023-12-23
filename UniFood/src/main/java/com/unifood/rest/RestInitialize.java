@@ -1,4 +1,4 @@
-package com.unifood.core.rest;
+package com.unifood.rest;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
