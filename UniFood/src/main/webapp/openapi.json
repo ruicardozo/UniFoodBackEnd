@@ -1,0 +1,66 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "UniFood",
+    "description" : "API REST do UniFood",
+    "version" : "v1"
+  },
+  "servers" : [ {
+    "url" : "/UniFood/rest",
+    "variables" : { }
+  } ],
+  "paths" : {
+    "/api/listatabelas" : {
+      "get" : {
+        "operationId" : "listaTabelas",
+        "responses" : {
+          "default" : {
+            "description" : "default response",
+            "content" : {
+              "application/json" : { }
+            }
+          }
+        }
+      }
+    },
+    "/api/html" : {
+      "get" : {
+        "operationId" : "testaServicoHtml",
+        "responses" : {
+          "default" : {
+            "description" : "default response",
+            "content" : {
+              "text/html" : { }
+            }
+          }
+        }
+      }
+    },
+    "/api/json" : {
+      "get" : {
+        "operationId" : "testaServicoJson",
+        "responses" : {
+          "default" : {
+            "description" : "default response",
+            "content" : {
+              "application/json" : { }
+            }
+          }
+        }
+      }
+    },
+    "/api/text" : {
+      "get" : {
+        "operationId" : "testaServicoText",
+        "responses" : {
+          "default" : {
+            "description" : "default response",
+            "content" : {
+              "text/plain" : { }
+            }
+          }
+        }
+      }
+    }
+  }
+}
