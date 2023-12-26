@@ -83,10 +83,5 @@
 			<version>2.1.10</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.procergs.acr</groupId>
-			<artifactId>prswagger-ui</artifactId>
-			<version>0.0.7</version>
-		</dependency>
 	</dependencies>
 </project>
