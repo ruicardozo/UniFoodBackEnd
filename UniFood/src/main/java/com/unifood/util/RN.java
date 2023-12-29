@@ -4,35 +4,33 @@ import java.util.List;
 
 public abstract class RN<E extends ED>
 {
-	private BD<E> bd;
-	private Val<E> val;
 
-	public void setBD(BD<E> bd)
-	{
-		this.bd = bd;
-	}
+	public abstract BD<E> getBD();
 
-	public void setVal(Val<E> val)
-	{
-		this.val = val;
-	}
+	public abstract Val<E> getVal();
 
 	public List<E> lista(E ed)
 	{
-		val.validaLista(ed);
-		return bd.lista(ed);
+		getVal().validaLista(ed);
+		return getBD().lista(ed);
 	}
 
 	public E inclui(E ed)
 	{
-		val.validaInclui(ed);
-		return bd.inclui(ed);
+		getVal().validaInclui(ed);
+		return getBD().inclui(ed);
 	}
 
 	public void remove(E ed)
 	{
-		val.validaRemove(ed);
-		bd.remove(ed);
+		getVal().validaRemove(ed);
+		getBD().remove(ed);
+	}
+
+	public E atualiza(E ed)
+	{
+		getVal().validaRemove(ed);
+		return getBD().atualiza(ed);
 	}
 
 }

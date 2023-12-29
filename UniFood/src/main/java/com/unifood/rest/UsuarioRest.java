@@ -1,6 +1,7 @@
 package com.unifood.rest;
 
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -18,9 +19,10 @@ public class UsuarioRest extends Rest
 
 	@POST
 	@Path("/lista")
+	@Consumes("application/json")
 	@Produces("application/json")
 	public Response lista(UsuarioED usuarioED) {
-		return Response.ok(usuarioRN.lista(usuarioED)).build();
+		return  addCorsHeaders(Response.ok(usuarioRN.lista(usuarioED))).build();
 	}
 
 }

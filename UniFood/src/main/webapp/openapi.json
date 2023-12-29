@@ -63,11 +63,11 @@
       }
     },
     "/usuario/lista" : {
-      "get" : {
+      "post" : {
         "operationId" : "lista",
         "requestBody" : {
           "content" : {
-            "*/*" : {
+            "application/json" : {
               "schema" : {
                 "$ref" : "#/components/schemas/UsuarioED"
               }

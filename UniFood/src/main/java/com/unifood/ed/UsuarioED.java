@@ -33,5 +33,5 @@ public class UsuarioED extends ED
 	private String preferenciaAlimentar;
 
 	@Column
-	private int tipo;
+	private Integer tipo;
 }
