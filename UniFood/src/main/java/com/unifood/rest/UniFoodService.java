@@ -13,9 +13,10 @@ import javax.ws.rs.core.Response;
 
 import com.unifood.ed.TabelaED;
 import com.unifood.rn.TabelaRN;
+import com.unifood.util.Rest;
 
 @Path("/api")
-public class UniFoodService
+public class UniFoodService extends Rest
 {
 	@Inject
 	private TabelaRN tabelaRN;
@@ -58,13 +59,5 @@ public class UniFoodService
 		return addCorsHeaders(Response.ok(lista)).build();
 	}
 
-	// Helper method to add CORS headers
-	private Response.ResponseBuilder addCorsHeaders(Response.ResponseBuilder responseBuilder)
-	{
-		return responseBuilder
-				.header("Access-Control-Allow-Origin", "*")
-				.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-				.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-				.header("Access-Control-Allow-Credentials", "true");
-	}
+
 }

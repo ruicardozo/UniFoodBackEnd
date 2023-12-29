@@ -13,5 +13,4 @@ public class UsuarioBD extends BD<UsuarioED>
 	@PersistenceContext(unitName = "UniFood")
 	private EntityManager em;
 
-
 }

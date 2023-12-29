@@ -61,6 +61,56 @@
           }
         }
       }
+    },
+    "/usuario/lista" : {
+      "get" : {
+        "operationId" : "lista",
+        "requestBody" : {
+          "content" : {
+            "*/*" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UsuarioED"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "default" : {
+            "description" : "default response",
+            "content" : {
+              "application/json" : { }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "UsuarioED" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string"
+          },
+          "senha" : {
+            "type" : "string"
+          },
+          "nome" : {
+            "type" : "string"
+          },
+          "sexo" : {
+            "type" : "string"
+          },
+          "preferenciaAlimentar" : {
+            "type" : "string"
+          },
+          "tipo" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      }
     }
   }
 }

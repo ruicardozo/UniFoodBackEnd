@@ -6,6 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import javax.ejb.Stateful;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -13,6 +14,7 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 
+@Stateful
 public abstract class BD<E extends ED>
 {
 	private Class<E> entidade;
@@ -92,5 +94,21 @@ public abstract class BD<E extends ED>
 			}
 		}
 	}
+
+	public E inclui(E ed)
+	{
+		return ed;
+	}
+
+	public void remove(E ed)
+	{
+
+	}
+
+	public E atualiza(E ed)
+	{
+		return ed;
+	}
+
 }
 
