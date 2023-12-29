@@ -1,5 +1,6 @@
 package com.unifood.util;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -7,6 +8,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.ejb.Stateful;
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -20,16 +22,12 @@ public abstract class BD<E extends ED>
 	@SuppressWarnings("unchecked")
 	public List<E> lista(E e)
 	{
-		Query query = getEntityManager().createNativeQuery(montaSqlSelect(e), entidade);
+		String sql = montaSqlSelect(e);
+		Query query = getEntityManager().createNativeQuery(sql, entidade);
+		System.out.println(String.format("[ %s ]", sql));
 
 		return query.getResultList();
 	}
-
-   private static boolean isGetter(Method method) {
-       return method.getName().startsWith("get") &&
-              method.getParameterCount() == 0 &&
-              !method.getReturnType().equals(void.class);
-   }
 
 	@SuppressWarnings("unchecked")
 	private Class<E> getEntityClass()
@@ -45,23 +43,26 @@ public abstract class BD<E extends ED>
 
 		montaSelect(sql);
 
-		Class<?> clazz = e.getClass();
-		Method[] methods = clazz.getMethods();
+      Field[] campos = e.getClass().getDeclaredFields();
 
-		for (Method method : methods)
+		for (Field campo : campos)
 		{
-			if (isGetter(method))
 			{
-				if (!"getClass".equals(method.getName()))
+				if (campo.isAnnotationPresent(Column.class))
 				{
-					Object valor;
-					valor = obtemValorDoGetter(e, method);
+					String nomeDaColuna = campo.getAnnotation(Column.class).name();
+					if (nomeDaColuna.isEmpty())
+					{
+						nomeDaColuna = campo.getName();
+					}
+					Object valor = extraiValorCampo(e, campo, nomeDaColuna);
 
 					if (valor != null)
 					{
 						sql.append(" and ");
-						sql.append(obtemNomeAtributoDoGetter(method.getName()));
-						if ("java.lang.String".equals(method.getReturnType().getName()))
+						sql.append(nomeDaColuna);
+
+						if ("java.lang.String".equals(campo.getType().getName()))
 						{
 							sql.append(String.format(" like '%%%s%%'", valor));
 						} else
@@ -76,19 +77,25 @@ public abstract class BD<E extends ED>
 		return sql.toString();
 	}
 
-	private Object obtemValorDoGetter(E e, Method method)
+	private Object extraiValorCampo(E e, Field campo, String nomeDaColuna)
 	{
-		Object valor;
-		try
-		{
-			valor = method.invoke(e);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1)
-		{
-			valor = null;
-			e1.printStackTrace();
+		Object valorDoCampo;
+		String nomeDoMetodoGetter = "get" + Character.toUpperCase(campo.getName().charAt(0)) + campo.getName().substring(1);
+
+		 try {
+		    Method metodoGetter = e.getClass().getMethod(nomeDoMetodoGetter);
+
+		    valorDoCampo = metodoGetter.invoke(e);
+
+		    System.out.println(nomeDaColuna + ": " + valorDoCampo);
+		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+		    ex.printStackTrace();
+		    valorDoCampo = null;
 		}
-		return valor;
+
+		return valorDoCampo;
 	}
+
 
 	private void montaSelect(StringBuilder sql)
 	{
@@ -101,24 +108,6 @@ public abstract class BD<E extends ED>
 	{
 		String result = getEntidade().getName().substring(0, getEntidade().getName().length() - 2);
 		return result.substring(result.lastIndexOf(".") + 1);
-	}
-
-	private static String obtemNomeAtributoDoGetter(String nomeMetodoGetter)
-	{
-		String result;
-
-		if (nomeMetodoGetter.startsWith("get") && nomeMetodoGetter.length() > 3)
-		{
-			result = Character.toLowerCase(nomeMetodoGetter.charAt(3)) + nomeMetodoGetter.substring(4);
-		} else if (nomeMetodoGetter.startsWith("is") && nomeMetodoGetter.length() > 2)
-		{
-			result = Character.toLowerCase(nomeMetodoGetter.charAt(2)) + nomeMetodoGetter.substring(3);
-		} else
-		{
-			throw new IllegalArgumentException("Não foi possível obeter o nome do método getter");
-		}
-
-		return result;
 	}
 
 	public E inclui(E ed)
